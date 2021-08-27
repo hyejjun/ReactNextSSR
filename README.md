@@ -93,4 +93,79 @@ post관련된 actions 내용을 넣고
 action.type에 따른 state를 바꾸는 작업을 함
 
 
+2. 인피니티스크롤
+3. 클릭시 해당 글만 가져오는 동적라우팅
+
+
+-----------
+
+# 인피니티스크롤
+[posts.jsx]
+import { useEffect } from 'react'
+
+1. window.scrollY
+: 현 시점 스크롤의 높이
+
+2. document.documentElement.clientHeight
+: 내 브라우저(눈에 보이는)의 높이
+
+3. document.documentElement.scrollHeight
+: 토탈 높이
+1+2 = 3 이 됨
+
+암튼 이거 라이브러리 있음
+
+
+# 클릭시 해당 글만 가져오는
+.../posts/1
+해당 id 값만 가져오는
+
+/pages/posts/[id].jsx 생성
+
+import { useRouter } from "next/router"
+
+const Post = ()=>{
+    const router = useRouter()
+    const {id} = router.query
+
+    return(
+        <>
+            hello {id}
+        </>
+    )
+}
+
+export default Post
+
+이거를 서버사이드렌더링으로 바꿔보자구
+
+이 id 값에 해당하는 값ㅇ르 initalState의 postDetail 에 담을것이다.
+이게 더 정확함 post 에서 필터링하는것보다는
+
+/reducers/post.js
+
+export const GET_POSTS_DETAIL_REQUEST = "GET_POSTS_DETAIL_REQUEST"
+export const GET_POSTS_DETAIL_SUCCESS = "GET_POSTS_DETAIL_SUCCESS"
+export const GET_POSTS_DETAIL_FAIL = "GET_POSTS_DETAIL_FAIL"
+
+
+
+export const GET_POSTS_DETAIL = (data) =>{
+    return{
+        type : GET_POSTS_DETAIL_REQUEST,
+        data
+    }
+}
+
+
+case 도 3개
+
+추가함
+
+/saga/postSaga.js
+
+GET_POSTS_DETAIL_REQUEST,
+    GET_POSTS_DETAIL_SUCCESS,
+    GET_POSTS_DETAIL_FAIL
+얘네를 import 해옴
 
